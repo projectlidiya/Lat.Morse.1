@@ -9,87 +9,47 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    body{
-      margin:0;
-      font-family:Poppins, sans-serif;
-      background:radial-gradient(#4b2e1e,#1c0f08);
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-    }
+    body{margin:0;font-family:Poppins,sans-serif;background:radial-gradient(#4b2e1e,#1c0f08);min-height:100vh;display:flex;justify-content:center;}
     .app{max-width:420px;width:100%;padding:20px;color:#fff}
-    .card{
-      background:#f7f2eb;
-      color:#3a2418;
-      border-radius:18px;
-      padding:16px;
-      margin-bottom:16px;
-      box-shadow:0 10px 25px rgba(0,0,0,.35);
-    }
+    .card{background:#f7f2eb;color:#3a2418;border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 10px 25px rgba(0,0,0,.35);}
     h1,h2,h3{text-align:center;margin-top:0}
-    input,button{
-      width:100%;
-      padding:14px;
-      border-radius:10px;
-      border:none;
-      font-size:16px;
-      box-sizing:border-box;
-      margin-bottom:10px;
-    }
+    input,button{width:100%;padding:14px;border-radius:10px;border:none;font-size:16px;box-sizing:border-box;margin-bottom:10px;}
     input{border:1px solid #ccc}
-    button{
-      background:linear-gradient(135deg,#7a4a2e,#a36a3f);
-      color:#fff;
-      cursor:pointer;
-      font-weight:600;
-    }
+    button{background:linear-gradient(135deg,#7a4a2e,#a36a3f);color:#fff;cursor:pointer;font-weight:600;}
     button.secondary{background:#8b3a2b}
     button:disabled{opacity:.6;cursor:not-allowed}
     .hidden{display:none}
     .top{display:flex;justify-content:space-between;font-weight:600;margin-bottom:10px}
     video{width:100%;border-radius:12px;margin:10px 0;background:#000}
-    #motivasi{
-      font-family:"Playfair Display",serif;
-      font-size:18px;
-      font-style:italic;
-      text-align:center;
-      line-height:1.7;
-      margin-top:18px;
-      color:#4b2e1e;
-    }
+    #motivasi{font-family:"Playfair Display",serif;font-size:18px;font-style:italic;text-align:center;line-height:1.7;margin-top:18px;color:#4b2e1e;}
   </style>
 </head>
 <body>
 <div class="app">
 
-<!-- START -->
 <div id="start" class="card">
-  <h2 style="text-align:center">Latihan Morse Video</h2>
-
+  <h2>Latihan Morse Video</h2>
   <div class="card" style="background:#efe6db">
-    <h3 style="text-align:center">📜 Aturan Main</h3>
+    <h3>📜 Aturan Main</h3>
     <ul>
-      <li><b>Setiap soal berupa video Morse</b> (suara / cahaya)</li>
-      <li><b>Waktu per soal 3 menit</b>, jawaban otomatis terkunci</li>
-      <li><b>Jawaban diketik manual</b>, tidak bisa diubah setelah waktu habis</li>
-      <li><b>Penilaian:</b> 1 huruf benar = 1 poin</li>
-      <li><b>Spasi wajib diketik</b> tapi <b>tidak dihitung skor</b></li>
-      <li><b>Tidak menampilkan kunci jawaban</b></li>
-      <li><b>Soal diacak</b>, cocok untuk latihan berulang</li>
+      <li>Setiap soal berupa video Morse (suara / cahaya)</li>
+      <li>Waktu per soal 3 menit, jawaban otomatis terkunci</li>
+      <li>Jawaban diketik manual, tidak bisa diubah setelah waktu habis</li>
+      <li>Penilaian: 1 huruf benar = 1 poin</li>
+      <li>Spasi wajib diketik tapi tidak dihitung skor</li>
+      <li>Tidak menampilkan kunci jawaban</li>
+      <li>Soal diacak, cocok untuk latihan berulang</li>
     </ul>
   </div>
-
   <input id="regu" placeholder="Nama Regu / Kontingen">
   <button id="btnMulai">▶ MULAI</button>
 </div>
 
-<!-- GAME -->
 <div id="game" class="hidden">
   <div class="top">
     <div id="timer">03:00</div>
     <div id="nomor">1 / 5</div>
   </div>
-
   <div class="card">
     <video id="video" controls muted playsinline></video>
     <input id="jawaban" placeholder="Ketik jawaban di sini">
@@ -97,170 +57,78 @@
   </div>
 </div>
 
-<!-- SELESAI -->
 <div id="selesai" class="hidden card"></div>
-
 </div>
 
 <script>
-// KONFIG
-const TOTAL_SOAL = 5;
-const WAKTU_SOAL = 180;
-
-// AUDIO
-const sClick = new Audio('sound/click.mp3');
-const sBenar = new Audio('sound/benar.mp3');
-const sSalah = new Audio('sound/salah.mp3');
-
-// BACKSOUND (SAAT KOREKSI)
-const backsound = new Audio('sound/backsound.mp3');
-backsound.loop = true;
-backsound.volume = 0.3;
-
-// KUNCI JAWABAN
-const kunci = [
-  'PRAMUKASESUMATRA',
-  'KAMISIAPMENOLONGSESAMA',
-  'BERSIHITUSEHAT',
-  'MISI4SELESAI',
-  'HORMATPEMIMPIN'
+const TOTAL_SOAL=5,WAKTU_SOAL=180;
+const sClick=new Audio('sound/click.mp3'),sBenar=new Audio('sound/benar.mp3'),sSalah=new Audio('sound/salah.mp3'),backsound=new Audio('sound/backsound.mp3');
+backsound.loop=true;backsound.volume=.3;
+const kunci=['PRAMUKA SESUMATRA','KAMI SIAP MENOLSA SESAMA','BERSIH ITU SEHAT','MISI 4 SELESAI','HORMAT PEMIMPIN'];
+const motivasiList=[
+'“<b>Nikmati setiap fase naik dan turun</b> sebagai pengalaman berharga dalam hidupmu.”<br>— L, <i>keep growing</i>',
+'“<b>Semakin sering kamu berlatih</b>, semakin banyak <b>motivasi</b> yang akan kamu dapatkan.”<br>— L, <i>keep growing</i>',
+'“Latihan hari ini adalah <b>pondasi kemenangan esok hari</b>.”<br>— AI',
+'“Tidak apa-apa berjalan pelan, selama <b>arahmu tidak berubah</b>.”<br>— AI'
 ];
-
-// QUOTE
-const motivasiUser = [
-  '“**Nikmati setiap fase naik dan turun** sebagai pengalaman berharga dalam hidupmu.”\n\n— L, *keep growing*',
-  '“**Semakin sering kamu berlatih**, semakin banyak **motivasi** yang akan kamu dapatkan.”\n\n— L, *keep growing*',
-  '“Walau ada **rasa sakit** dan **lelah**, kamu boleh melambat, tapi **tetap konsisten pada prosesmu**.”\n\n— L, *keep growing*'
-];
-
-const motivasiAI = [
-  '“Latihan hari ini adalah **pondasi kemenangan esok hari**.”\n\n— AI',
-  '“Tidak apa-apa berjalan pelan, selama **arahmu tidak berubah**.”\n\n— AI'
-];
-
-const motivasiList = [...motivasiUser, ...motivasiAI];
-
-// ELEMENT
-const startEl = document.getElementById('start');
-const gameEl = document.getElementById('game');
-const selesaiEl = document.getElementById('selesai');
-const video = document.getElementById('video');
-const jawabanEl = document.getElementById('jawaban');
-const timerEl = document.getElementById('timer');
-const nomorEl = document.getElementById('nomor');
-
-// STATE
-let urutan = [];
-let index = 0;
-let waktu = WAKTU_SOAL;
-let timer;
-let skor = 0;
-let jawabanUser = [];
-let namaRegu = '';
-
-// EVENT
-document.getElementById('btnMulai').onclick = mulai;
-document.getElementById('btnKirim').onclick = kirim;
-
-function mulai(){
-  const regu = document.getElementById('regu').value.trim();
+const startEl=document.getElementById('start'),gameEl=document.getElementById('game'),selesaiEl=document.getElementById('selesai'),video=document.getElementById('video'),jawabanEl=document.getElementById('jawaban'),timerEl=document.getElementById('timer'),nomorEl=document.getElementById('nomor');
+let urutan=[],index=0,timer,skor=0,skorPerSoal=[],skorMaksPerSoal=[],skorMaksTotal=0,jawabanUser=[],namaRegu='';
+document.getElementById('btnMulai').addEventListener('click',()=>{
+  const regu=document.getElementById('regu').value.trim();
   if(!regu){alert('Isi nama regu dulu');return;}
-  namaRegu = regu;
-  sClick.play();
-  urutan = Array.from({length:TOTAL_SOAL},(_,i)=>i).sort(()=>Math.random()-0.5);
-  index=0; skor=0; jawabanUser=[];
-  startEl.classList.add('hidden');
-  gameEl.classList.remove('hidden');
-  tampilSoal();
-}
-
+  namaRegu=regu;
+  try{sClick.currentTime=0;sClick.play()}catch(err){}
+  urutan=[...Array(TOTAL_SOAL).keys()].sort(()=>Math.random()-.5);
+  index=0;skor=0;jawabanUser=[];skorPerSoal=[];skorMaksPerSoal=[];skorMaksTotal=0;
+  startEl.classList.add('hidden');gameEl.classList.remove('hidden');tampilSoal();
+});
+document.getElementById('btnKirim').addEventListener('click',kirim);
 function tampilSoal(){
-  nomorEl.textContent = `${index+1} / ${TOTAL_SOAL}`;
-  jawabanEl.value=''; jawabanEl.disabled=false;
-  video.src = `video/${urutan[index]+1}.mp4`;
-  video.load(); video.play().catch(()=>{});
+  nomorEl.textContent=`${index+1} / ${TOTAL_SOAL}`;
+  jawabanEl.value='';jawabanEl.disabled=false;
+  video.src=`video/${urutan[index]+1}.mp4`;
+  video.load();video.play().catch(()=>{});
   mulaiTimer();
 }
-
 function mulaiTimer(){
   clearInterval(timer);
-  waktu = WAKTU_SOAL;
-  timerEl.textContent = format(waktu);
-  timer = setInterval(()=>{
-    waktu--; timerEl.textContent = format(waktu);
-    if(waktu<=0){kunciJawaban();}
-  },1000);
+  let waktu=WAKTU_SOAL;
+  timerEl.textContent=format(waktu);
+  timer=setInterval(()=>{waktu--;timerEl.textContent=format(waktu);if(waktu<=0)kunciJawaban();},1e3);
 }
-
-function kirim(){
-  clearInterval(timer);
-  kunciJawaban();
-}
-
+function kirim(){clearInterval(timer);kunciJawaban();}
 function kunciJawaban(){
   jawabanEl.disabled=true;
-  const j = jawabanEl.value;
-  jawabanUser.push(j);
-  skor += hitungSkor(j, kunci[urutan[index]]);
-  index++;
-  if(index>=TOTAL_SOAL) selesai();
-  else tampilSoal();
+  const j=jawabanEl.value;
+  const hasil=smartScore(j,kunci[urutan[index]]);
+  skor+=hasil.score;
+  skorPerSoal.push(hasil.score);
+  skorMaksPerSoal.push(hasil.max);
+  skorMaksTotal+=hasil.max;
+  jawabanUser.push(hasil.detail||j);
+  index++;index>=TOTAL_SOAL?selesai():tampilSoal();
 }
-
-function hitungSkor(jawab, kunci){
-  let a = jawab.toUpperCase().replace(/ /g,'');
-  let b = kunci.toUpperCase();
-  let nilai = 0;
-  for(let i=0;i<Math.min(a.length,b.length);i++){
-    if(a[i]===b[i]) nilai++;
-  }
-  if(nilai>0) sBenar.play(); else sSalah.play();
-  return nilai;
+function smartScore(uRaw,cRaw){
+  const u=uRaw.toUpperCase(),c=cRaw.toUpperCase();
+  const uc=u.replace(/[^A-Z0-9]/g,''),cc=c.replace(/[^A-Z0-9]/g,'');
+  const max=cc.length;if(u.length===0)return{score:0,max,detail:uRaw};
+  let score=0,highlighted='',idx=0;
+  for(let ch of uRaw){
+    if(/[A-Z0-9]/.test(ch)){if(idx<cc.length&&ch===cc[idx]){highlighted+=`<span style="color:green;font-weight:bold">${ch}</span>`;score++}else{highlighted+=`<span style="color:red;font-weight:bold">${ch}</span>`}idx++}else{highlighted+=ch}}
+  score>0?sBenar.play():sSalah.play();
+  return{score,max,detail:highlighted};
 }
-
 function selesai(){
   gameEl.classList.add('hidden');
-
-  // nyalakan backsound koreksi
-  backsound.currentTime = 0;
-  backsound.play().catch(()=>{});
-
-  let html = `
-    <h2>🎉 Latihan Selesai</h2>
-    <p><b>Regu:</b> ${namaRegu}</p>
-    <h3>Total Skor: ${skor}</h3>
-  `;
-
-  jawabanUser.forEach((j,i)=>{
-    html += `
-      <div class="card">
-        <p><b>Soal ${i+1}:</b> "${j || '-'}"</p>
-      </div>`;
-  });
-
-  const quote = motivasiList[Math.floor(Math.random()*motivasiList.length)];
-
-  html += `
-    <p id="motivasi">${quote}</p>
-    <button onclick="ulang()">🔁 ULANGI LATIHAN</button>
-  `;
-
-  selesaiEl.innerHTML = html;
-  selesaiEl.classList.remove('hidden');
+  backsound.currentTime=0;backsound.play().catch(()=>{});
+  let html=`<h2>🎉 Latihan Selesai</h2><p><b>Regu:</b> ${namaRegu}</p><h3>BENAR ${skor} POIN / ${skorMaksTotal}</h3>`;
+  jawabanUser.forEach((j,i)=>{html+=`<div class="card"><p><b>Soal ${i+1}:</b> "${j||'-'}"</p><p><b>Skor:</b> ${skorPerSoal[i]} / ${skorMaksPerSoal[i]} poin</p></div>`});
+  const quote=motivasiList[Math.floor(Math.random()*motivasiList.length)];
+  html+=`<p id="motivasi">${quote}</p><button onclick="ulang()">🔁 ULANGI LATIHAN</button>`;
+  selesaiEl.innerHTML=html;selesaiEl.classList.remove('hidden');
 }
-
-function ulang(){
-  // matikan backsound koreksi
-  backsound.pause();
-  backsound.currentTime = 0;
-
-  selesaiEl.classList.add('hidden');
-  startEl.classList.remove('hidden');
-  document.getElementById('regu').value='';
-  document.getElementById('regu').value='';
-}
-
-function format(d){return `${String(Math.floor(d/60)).padStart(2,'0')}:${String(d%60).padStart(2,'0')}`}
+function ulang(){backsound.pause();backsound.currentTime=0;selesaiEl.classList.add('hidden');startEl.classList.remove('hidden');document.getElementById('regu').value='';}
+function format(d){return `${String(Math.floor(d/60)).padStart(2,'0')}:${String(d%60).padStart(2,'0')}`;}
 </script>
 </body>
 </html>
